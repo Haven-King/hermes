@@ -18,15 +18,17 @@ public class Hermes {
     public static Collection<ModContainer> getViewedMods() {
         Collection<ModContainer> viewedMods = new LinkedHashSet<>();
 
-        try (Reader reader = Files.newBufferedReader(FILE)) {
-            for (JsonElement element : new JsonParser().parse(reader).getAsJsonArray()) {
-                String modId = element.getAsString();
-                Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modId);
+        if (Files.exists(FILE)) {
+            try (Reader reader = Files.newBufferedReader(FILE)) {
+                for (JsonElement element : new JsonParser().parse(reader).getAsJsonArray()) {
+                    String modId = element.getAsString();
+                    Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modId);
 
-                modContainer.ifPresent(viewedMods::add);
+                    modContainer.ifPresent(viewedMods::add);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return viewedMods;

@@ -41,8 +41,10 @@ public abstract class MixinMinecraftClient {
             }
 
             if (openScreen) {
-                String message = mods.stream().map(container -> container.getMetadata().getName()).collect(Collectors.joining("\n"));
-                this.openScreen(new WarningScreen(this.currentScreen, new LiteralText("The following mods/libraries should not be JiJ'd:"), new LiteralText(message)));
+                this.openScreen(new WarningScreen(
+                        this.currentScreen,
+                        new LiteralText("The following mods/libraries should not be JiJ'd:"),
+                        mods.stream().map(container -> container.getMetadata().getName()).collect(Collectors.toList())));
             }
 
             Hermes.save(viewedMods);
